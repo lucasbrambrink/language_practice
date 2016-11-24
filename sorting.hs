@@ -1,3 +1,4 @@
+-- Quicksort
 quicksort :: (Ord a) => [a] -> [a]
 quicksort [] = []
 quicksort [x] = [x]
@@ -8,19 +9,38 @@ quicksort (x:xs) =
 
 
 -- Merge Sort
-mergeArray :: (Ord a) => [a] -> [a] -> [a]
-mergeArray [] [] = []
-mergeArray [x] [y] = if x <= y then [x, y] else [y, x]
-mergeArray (x:xs) [] = x:xs
-mergeArray [] (y:ys) = y:ys
-mergeArray (x:xs) (y:ys) = 
-    if x <= y then x:(mergeArray xs (y:ys)) else y:(mergeArray (x:xs) ys)
+merge' :: (Ord a) => [a] -> [a] -> [a]
+merge' [] [] = []
+merge' [x] [y] = if x <= y then [x, y] else [y, x]
+merge' (x:xs) [] = x:xs
+merge' [] (y:ys) = y:ys
+merge' (x:xs) (y:ys) = 
+    if x <= y then x:(merge' xs (y:ys)) else y:(merge' (x:xs) ys)
 
 mergesort :: (Ord a) => [a] -> [a]
 mergesort [] = []
 mergesort [x] = [x]
 mergesort (x:xs) =
-    let a = splitAt (quot (length (x:xs)) 2) (x:xs)
-        b = mergesort (fst a)
-        c = mergesort (snd a)
-    in mergeArray b c
+    let bifurcated = splitAt (quot (length (x:xs)) 2) (x:xs)
+        lowerHalf = mergesort (fst bifurcated)
+        upperHalf = mergesort (snd bifurcated)
+    in merge' lowerHalf upperHalf
+
+-- Bubble sort
+bubble' :: (Ord a) => [a] -> [a]
+bubble' [] = []
+bubble' [x] = [x]
+bubble' (x:xs) = 
+    let y = head xs
+        z = tail xs
+    in if x < y then y:(bubble' $ x:z)
+      else x:(bubble' $ y:z)
+
+bubblesort :: (Ord a) => [a] -> [a]
+bubblesort [] = []
+bubblesort x = 
+    let bubbledThrough = bubble' x
+    in (last bubbledThrough):(bubblesort $ init bubbledThrough)
+
+
+-- Heapsort
