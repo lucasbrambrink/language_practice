@@ -1,4 +1,5 @@
 import System.Environment (getArgs)
+import Data.List
 
 fib' :: Int -> Int
 fib' 0 = 0
@@ -17,9 +18,33 @@ countOnes' x =
     let digits = [snd a | a <- (zip [1..] (show x))]
     in length $ filter (=='1') digits
 
+-- Prime
+isPrime' :: Int -> Bool
+isPrime' 1 = True
+isPrime' x = not $ any (\y -> (mod x y) == 0) [2..(x-1)]
+    
+
+showPrimeUntil :: Int -> String
+showPrimeUntil x = 
+    let primeList = map show $ filter isPrime' [2..x]
+    in intercalate "," primeList
+
+-- Mth 
+getMthElement :: (Num i) => i -> [a] -> a
+getMthElement m list = reverse list !! m + 1
+
+
 main = do
     [inpFile] <- getArgs
     input <- readFile inpFile
-    let inputs = map (\x -> read x :: Int) (lines input)
-        countedBinaries = map (countOnes' . toBinary') inputs
-    mapM_ putStrLn $ map show countedBinaries
+    let inputs = [let w = words a in (read (last w) :: Int, init w) | a <- (lines input)]
+        answers = [(getMthElement (fst w) (snd w)) | w <- inputs]
+    mapM_ putStrLn $ answers
+
+
+
+
+
+
+
+
