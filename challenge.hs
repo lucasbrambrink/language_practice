@@ -117,8 +117,6 @@ addLinks' chain wrds =
         otherWords = filter (\x -> x /= link) wrds
     in [newLink:chain | newLink <- (filter (\x -> last link == head x) wrds), newLink `notElem` chain]
 
---extendChains' :: [[String]] -> [String] -> [[String]]
---extendChains' chains wrds = map  chains
 
 applyNextChain' :: [[String]] -> [String] -> [[String]]
 applyNextChain' chains wrds = [c | t <- [addLinks' x wrds | x <- chains], c <- t]
@@ -136,16 +134,8 @@ longestChain' wrds =
     in if (length longestChain) == 1 then "None"
         else show $ length longestChain
 
---longestChain' :: [String] -> [[String]]
---longestChain' wrds =
---    let seedList = [[word] | word <- wrds]
---        mapped = extendChains seedList
 
---    let mapped = [(chain, availableChains' chain wrds) | chain <- [[x] | x <- wrds]]
---    in [nextLink:(fst m) | m <- mapped, nextLink <- (snd m)]
-
-
-
+-- Parsing by comma
 splitAlong' :: (Char -> Bool) -> String -> [String]
 splitAlong' predicate "" = []
 splitAlong' predicate xs =
