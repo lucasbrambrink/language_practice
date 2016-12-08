@@ -43,4 +43,46 @@ bubblesort x =
     in (last bubbledThrough):(bubblesort $ init bubbledThrough)
 
 
--- Heapsort
+-- Cocktail sort
+bubbleDir' :: (Ord a) => [a] -> [a]
+bubbleDir' [] = []
+bubbleDir' [x] = [x]
+bubbleDir' (x:xs) = 
+    let y = head xs
+        z = tail xs
+    in if x < y then x:(bubbleDir' $ y:z)
+      else y:(bubbleDir' $ x:z)
+
+bubbleBackward' :: (Ord a) => [a] -> [a]
+bubbleBackward' [] = []
+bubbleBackward' [x] = [x]
+bubbleBackward' (x:xs) = 
+    let y = head xs
+        z = tail xs
+    in if x > y then x:(bubbleBackward' $ y:z)
+      else y:(bubbleBackward' $ x:z)
+
+bubbleBackwards' :: (Ord a) => [a] -> [a]
+bubbleBackwards' xs = reverse $ bubbleBackward' $ reverse xs
+
+cocktailsort' :: (Ord a) => Int -> [a] -> [a]
+cocktailsort' _ [] = []
+cocktailsort' _ [x] = [x]
+cocktailsort' 0 xs = xs
+cocktailsort' i xs =
+    let nextPass = bubbleBackwards' $ bubbleForward' xs
+    in cocktailsort' (i - 1) nextPass
+
+
+
+
+
+
+
+
+
+
+
+
+
+

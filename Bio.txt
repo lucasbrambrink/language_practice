@@ -1,7 +1,0 @@
-My name is Lucas Brambrink. Born in Germany and living in the US, I grew my passion of software engineering from science, mathematics, music and philosophy. I focus on clean architecture design, driving to tame the emergent complexity of inteconnecting systems.
-
-I have worked on serveral enterprise level systems in my career in many different languages, including Python, C#, C, and Javascript. Currently I work as a software enginner at DgDean, where we handle app development for promising start-ups. My main project is Singlecare, a discount network for health services not covered by insurance, as a full-stack developer within a distributed .NET architecture. Previously I worked at Freelancers Union, a non-profit organization aimed at protecting and advocating the freelancing economy. I refined backend functionality and reporting as well as implemented a big rebranding project for the organization. 
-
-What I am offering is engineering talent. Good software engineers have intuition: they make smart architecture design decisions, avoid implementation choices that lead to technical debt, and can build robust, scalable services effectively. These are the essential skills that decide the success of any software project--skills that I demonstrably possess. 
-
-I would be the lead developer for Great Believer’s proposed development of the City Harvest “HarvestHub” mobile application.

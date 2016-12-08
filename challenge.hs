@@ -90,13 +90,75 @@ cocktailsort' i xs =
     let nextPass = bubbleBackwards' $ bubbleForward' xs
     in cocktailsort' (i - 1) nextPass
 
+-- Combinations
+combinations' :: (Ord a) => [a] -> Int -> [[a]]
+combinations' xs 1 = [[x] | x <- xs]
+combinations' xs num = 
+    let prev = combinations' xs (num - 1)
+    in [(y:x) | x <- prev, y <- xs, y `notElem` x]
+
+
+combs' :: (Ord a) => [a] -> Int -> [[a]]
+combs' xs num = nub $ combinations' xs num
+
+
+factorial' :: Int -> Int
+factorial' 1 = 1
+factorial' x = x * factorial' (x - 1)
+
+-- n! / k!(n - k)!
+numCombs' :: Int -> Int -> Int
+numCombs' n k = (factorial' n) `div` (factorial' n) * (factorial' (n - k))
+
+--Word chains
+addLinks' :: [String] -> [String] -> [[String]]
+addLinks' chain wrds =
+    let link = head chain
+        otherWords = filter (\x -> x /= link) wrds
+    in [newLink:chain | newLink <- (filter (\x -> last link == head x) wrds), newLink `notElem` chain]
+
+--extendChains' :: [[String]] -> [String] -> [[String]]
+--extendChains' chains wrds = map  chains
+
+applyNextChain' :: [[String]] -> [String] -> [[String]]
+applyNextChain' chains wrds = [c | t <- [addLinks' x wrds | x <- chains], c <- t]
+
+untilLongest' :: [[String]] -> [String] -> [[String]]
+untilLongest' chains wrds = 
+    let nextIter = applyNextChain' chains wrds
+    in if null nextIter then chains
+        else if (length $ head nextIter) > (length $ head chains)
+        then untilLongest' nextIter wrds else nextIter
+
+longestChain' :: [String] -> String
+longestChain' wrds = 
+    let longestChain = head $ untilLongest' [[x] | x <- wrds] wrds
+    in if (length longestChain) == 1 then "None"
+        else show $ length longestChain
+
+--longestChain' :: [String] -> [[String]]
+--longestChain' wrds =
+--    let seedList = [[word] | word <- wrds]
+--        mapped = extendChains seedList
+
+--    let mapped = [(chain, availableChains' chain wrds) | chain <- [[x] | x <- wrds]]
+--    in [nextLink:(fst m) | m <- mapped, nextLink <- (snd m)]
+
+
+
+splitAlong' :: (Char -> Bool) -> String -> [String]
+splitAlong' predicate "" = []
+splitAlong' predicate xs =
+    let split = break predicate xs
+    in (fst split):(splitAlong' predicate $
+        let z = snd split in if null z then [] else tail z)
 
 main = do
     [inpFile] <- getArgs
     input <- readFile inpFile
-    let inputs = [let w = words a in (read (last w) :: Int, map (\x -> read x :: Int) $ (init $ init w)) | a <- (lines input)]
-        answers = map unwords $ [let sorted = cocktailsort' (fst t) (snd t) in map show sorted | t <- inputs]
-    mapM_ putStrLn $ answers
+    let inputs = [splitAlong' (==',') a | a <- (lines input)]
+        chainLengths = [longestChain' line | line <- inputs]
+    mapM_ putStrLn $ chainLengths
 
 
 
