@@ -71,6 +71,18 @@ void construct_heap(priority_queue *q, item_type s[], int n)
 	}
 }
 
+void make_heap(priority_queue *q, item_type s[], int n)
+{
+	/* better heap construction -- converges on linear time (not n*log(n)) */
+	int i;
+	q->n = n;
+	for(i=0; i<n; i++)
+		q[i+1] = s[i];
+
+	for(i=q->n; i>0; i--)
+		bubble_down(q, i);
+}
+
 void bubble_down(priority_queue *q, int position)
 {
 	/*
@@ -112,6 +124,8 @@ item_type pop_min(priority_queue *q)
 
 	return(min);
 }
+
+/* Printing functions */
 void print_heap(priority_queue *q)
 {
 	int i;
@@ -133,14 +147,12 @@ void print_arr(item_type s[], int n)
 
 void heapsort(item_type s[], int n)
 {
+	int i;
 	priority_queue q;
+	
 	construct_heap(&q, s, n);
-	int i = 0;
-	while (q.n > 0)
-	{
+	for(i=0; i<n; i++)
 		s[i] = pop_min(&q);
-		i++;
-	}	
 }
 
 
@@ -149,10 +161,6 @@ int main()
 	int test[] = {9,6,7,8,1,3,4};
 	heapsort(test, 7);
 	print_arr(test, 7);
-	// construct_heap(&p, test, 7);
-	// item_type min = p.q[1];
-	// printf("%d", min);
-	// print_heap(&p);
 	printf("\n");
 	return(1);
 }
